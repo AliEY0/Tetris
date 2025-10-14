@@ -8,6 +8,7 @@ typedef struct {
     int height;
     int curr_rotation;
     int number_rotations;
+    int id;
 } Tetrimino;
 
 

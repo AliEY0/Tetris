@@ -21,7 +21,7 @@ void draw_tetrimino(Tetrimino *tetrimino){
 void init_tetrimino(Tetrimino *tetrimino, int id){
     memset(tetrimino->arr, 0, sizeof(tetrimino->arr));
     tetrimino->curr_rotation = 0;
-    
+    tetrimino->id = id;    
     if(id == 0){
         tetrimino->number_rotations = 0;
     } else if(id == 1 || id > 4){
@@ -136,21 +136,19 @@ void rotate_tetrimino(Tetrimino *tetrimino, int id) {
     int temp[4][4] = {0};
     if (id == 0) return;
 
-    // Rotatie: 90° rechts (clockwise)
+    // Rotatie
     for (int i = 0; i < tetrimino->height; i++) {
         for (int j = 0; j < tetrimino->width; j++) {
             temp[j][tetrimino->height - 1 - i] = tetrimino->arr[i][j];
         }
     }
 
-    // Kopieer terug naar originele array
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             tetrimino->arr[i][j] = temp[i][j];
         }
     }
 
-    // Wissel width en height
     int tmp = tetrimino->width;
     tetrimino->width = tetrimino->height;
     tetrimino->height = tmp;
