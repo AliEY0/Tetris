@@ -1,4 +1,5 @@
 #ifndef BOARD_H
+
 #define BOARD_H
 #include <stdbool.h>
 #define ROW 20
