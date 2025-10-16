@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
-
+#include <time.h>
 #include <ncurses.h>
 #include "input.h"
 #include "tetrimino.h"
@@ -29,19 +29,11 @@ int main() {
     int test = 0;
     Board board;
     init_board(&board);
-    int spc = 1;
-    for(int i = 0; i < 7; i++){
-        for(int j = 0; j < COLUMN - spc; j++){
-            board.arr[i][j+spc] = '*';
-        }
-
-    }
-
     while(test<100){
         //test = 9;
-        //int n = rand() % 7;
+        int n = rand() % 7;
         // n = 1 3 4
-        int n = 1;
+        //int n = 1;
         
         //transerror 3
 

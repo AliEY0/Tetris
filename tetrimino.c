@@ -133,25 +133,25 @@ void init_tetrimino(Tetrimino *t, int id) {
         } break;
     }
 }
-
-bool rotate_allowed(Tetrimino *tetrimino, Board *board, int *row, int *column){
+bool rotate_allowed(Tetrimino *tetrimino, Board *board, int *row, int *column) {
     Tetrimino cc = *tetrimino;
     rotate_tetrimino(&cc, cc.id);
-    if(*column + cc.width[cc.curr_rotation] > COLUMN) return false;
-    if(left_right_boundaries(&cc, board, *row, *column) == false){
-        return false;
-    }
 
-  /*  for(int i = 0; i < tetrimino[tetrimino->curr_rotation]->height[tetrimino->curr_rotation]; i++){
+    if (!left_right_boundaries(&cc, board, *row, *column)) return false;
+    if (*row + cc.height[cc.curr_rotation] > ROW) return false;
 
-        for(int j = 0; j < tetrimino->width; j++){
-            if(tetrimino->arr[i][j]){
-                
+    for (int i = 0; i < cc.height[cc.curr_rotation]; i++) {
+        for (int j = 0; j < cc.width[cc.curr_rotation]; j++) {
+            if (cc.arr[cc.curr_rotation][i][j]) {
+                if (board->arr[*row + i][*column + j] == '*') {
+                    return false;
+                }
             }
         }
     }
-    */return true;
+    return true;
 }
+
 void rotate_tetrimino(Tetrimino *t, int id) {
     t->curr_rotation = (t->curr_rotation + 1) % t->number_rotations;
 }

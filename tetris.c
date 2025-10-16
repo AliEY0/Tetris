@@ -177,7 +177,7 @@ void drop_tetrimino(Tetrimino *tetrimino, Board *board, int *row, int *column) {
                 if(rotate_allowed(tetrimino, board, row, column)){
                     rotate_tetrimino(tetrimino, tetrimino->id);
                 }
-                //draw_tetrimino_onboard(tetrimino, board, row, column);
+                draw_tetrimino_onboard(tetrimino, board, row, column);
                 break;
             case -1:
                 endwin();
