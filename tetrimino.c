@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include "board.h"
 #include "tetrimino.h"
 #include <string.h>
-
-
+#include "tetris.h"
+/*
 void draw_tetrimino(Tetrimino *tetrimino){
     for(int i = 0; i < tetrimino->height; i++){
         for(int j = 0; j < tetrimino->width; j++){
@@ -16,141 +17,141 @@ void draw_tetrimino(Tetrimino *tetrimino){
     }
     
 }
+*/
 
+void init_tetrimino(Tetrimino *t, int id) {
+    memset(t, 0, sizeof(Tetrimino));
+    t->curr_rotation = 0;
+    t->id = id;
 
-void init_tetrimino(Tetrimino *tetrimino, int id){
-    memset(tetrimino->arr, 0, sizeof(tetrimino->arr));
-    tetrimino->curr_rotation = 0;
-    tetrimino->id = id;    
-    if(id == 0){
-        tetrimino->number_rotations = 0;
-    } else if(id == 1 || id > 4){
-        tetrimino->number_rotations = 2;
-    } else {
-        tetrimino->number_rotations = 4;
-    }
-
+    if (id == 0) t->number_rotations = 1;           
+    else if (id == 1 || id > 4) t->number_rotations = 2; 
+    else t->number_rotations = 4;                   
 
     switch (id) {
-        case 0:{ // O
-            int temp_arr[4][2] = {
-                {0,0}, {0,1}, {1,0}, {1,1}
-            };
-            tetrimino->width = 2;
-            tetrimino->height = 2;
-            for(int i = 0; i < 4;i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
-            }
-   
-            break;
-            };
-   case 1: { // I 
-            int temp_arr[4][2] = {
-                {0,0}, {1,0}, {2,0}, {3,0}
-            };
-            tetrimino->width = 1;
-            tetrimino->height = 4;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
+        case 0: // O
+            for (int r = 0; r < 1; r++) {
+                int temp[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+                t->width[r] = 2; t->height[r] = 2;
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][temp[i][0]][temp[i][1]] = 1;
             }
             break;
-        }
 
-        case 2: { // T 
-            int temp_arr[4][2] = {
-                {0,1}, {1,0}, {1,1}, {1,2}
-            };
-            tetrimino->width = 3;
-            tetrimino->height = 2;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
-            }
-            break;
-        }
+        case 1:{ // I
+            int temp0[4][2] = {{0,0},{1,0},{2,0},{3,0}};
+            t->width[0] = 1; t->height[0] = 4;
+            for (int i = 0; i < 4; i++)
+                t->arr[0][temp0[i][0]][temp0[i][1]] = 1;
 
-        case 3: { // L
-            int temp_arr[4][2] = {
-                {0,0}, {1,0}, {2,0}, {2,1}
-            };
-            tetrimino->width = 2;
-            tetrimino->height = 3;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
-            }
+            int temp1[4][2] = {{0,0},{0,1},{0,2},{0,3}};
+            t->width[1] = 4; t->height[1] = 1;
+            for (int i = 0; i < 4; i++)
+                t->arr[1][temp1[i][0]][temp1[i][1]] = 1;
             break;
-        }
-
-        case 4: { // J
-            int temp_arr[4][2] = {
-                {0,1}, {1,1}, {2,1}, {2,0}
+               }
+        case 2: // T
+        {
+            int rot[4][4][2] = {
+                {{0,1},{1,0},{1,1},{1,2}},   
+                {{0,1},{1,0},{1,1},{2,1}},  
+                {{1,0},{1,1},{1,2},{2,1}},  
+                {{0,0},{1,0},{1,1},{2,0}}    
             };
-            tetrimino->width = 2;
-            tetrimino->height = 3;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
+            int dims[4][2] = {{3,2},{2,3},{3,2},{2,3}};
+            for (int r = 0; r < 4; r++) {
+                t->width[r] = dims[r][0];
+                t->height[r] = dims[r][1];
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
             }
-            break;
-        }
+        } break;
 
-        case 5: { // S
-            int temp_arr[4][2] = {
-                {0,1}, {0,2}, {1,0}, {1,1}
+        case 3: // L
+        {
+            int rot[4][4][2] = {
+                {{0,0},{1,0},{2,0},{2,1}},
+                {{0,1},{1,1},{1,0},{1,2}},
+                {{0,0},{0,1},{1,1},{2,1}},
+                {{0,0},{0,1},{0,2},{1,0}}
             };
-            tetrimino->width = 3;
-            tetrimino->height = 2;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
+            int dims[4][2] = {{2,3},{3,2},{2,3},{3,2}};
+            for (int r = 0; r < 4; r++) {
+                t->width[r] = dims[r][0];
+                t->height[r] = dims[r][1];
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
             }
-            break;
-        }
+        } break;
 
-        case 6: { // Z
-            int temp_arr[4][2] = {
-                {0,0}, {0,1}, {1,1}, {1,2}
+        case 4: // J
+        {
+            int rot[4][4][2] = {
+                {{0,1},{1,1},{2,1},{2,0}},
+                {{0,0},{0,1},{0,2},{1,2}},
+                {{0,0},{0,1},{1,0},{2,0}},
+                {{0,0},{1,0},{1,1},{1,2}}
             };
-            tetrimino->width = 3;
-            tetrimino->height = 2;
-            for(int i = 0; i < 4; i++){
-                int x = temp_arr[i][0];
-                int y = temp_arr[i][1];
-                tetrimino->arr[x][y] = 1;
+            int dims[4][2] = {{2,3},{3,2},{2,3},{3,2}};
+            for (int r = 0; r < 4; r++) {
+                t->width[r] = dims[r][0];
+                t->height[r] = dims[r][1];
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
             }
-            break;
-        }
+        } break;
 
+        case 5: // S
+        {
+            int rot[2][4][2] = {
+                {{0,1},{0,2},{1,0},{1,1}},
+                {{0,0},{1,0},{1,1},{2,1}}
+            };
+            int dims[2][2] = {{3,2},{2,3}};
+            for (int r = 0; r < 2; r++) {
+                t->width[r] = dims[r][0];
+                t->height[r] = dims[r][1];
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
+            }
+        } break;
+
+        case 6: // Z
+        {
+            int rot[2][4][2] = {
+                {{0,0},{0,1},{1,1},{1,2}},
+                {{0,1},{1,0},{1,1},{2,0}}
+            };
+            int dims[2][2] = {{3,2},{2,3}};
+            for (int r = 0; r < 2; r++) {
+                t->width[r] = dims[r][0];
+                t->height[r] = dims[r][1];
+                for (int i = 0; i < 4; i++)
+                    t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
+            }
+        } break;
     }
 }
-void rotate_tetrimino(Tetrimino *tetrimino, int id) {
-    int temp[4][4] = {0};
-    if (id == 0) return;
 
-    // Rotatie
-    for (int i = 0; i < tetrimino->height; i++) {
-        for (int j = 0; j < tetrimino->width; j++) {
-            temp[j][tetrimino->height - 1 - i] = tetrimino->arr[i][j];
-        }
+bool rotate_allowed(Tetrimino *tetrimino, Board *board, int *row, int *column){
+    Tetrimino cc = *tetrimino;
+    rotate_tetrimino(&cc, cc.id);
+    if(*column + cc.width[cc.curr_rotation] > COLUMN) return false;
+    if(left_right_boundaries(&cc, board, *row, *column) == false){
+        return false;
     }
 
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            tetrimino->arr[i][j] = temp[i][j];
+  /*  for(int i = 0; i < tetrimino[tetrimino->curr_rotation]->height[tetrimino->curr_rotation]; i++){
+
+        for(int j = 0; j < tetrimino->width; j++){
+            if(tetrimino->arr[i][j]){
+                
+            }
         }
     }
-
-    int tmp = tetrimino->width;
-    tetrimino->width = tetrimino->height;
-    tetrimino->height = tmp;
+    */return true;
+}
+void rotate_tetrimino(Tetrimino *t, int id) {
+    t->curr_rotation = (t->curr_rotation + 1) % t->number_rotations;
 }
 
