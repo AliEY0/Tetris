@@ -37,7 +37,10 @@ int main() {
         //int n = rand() % 7;
         // n = 1 3 4
         //int n = 1;
-        int n = 2;
+        
+        //transerror 3
+
+        int n = 3;
         Tetrimino *tetrimino = generate_tetrimino(n);
         //rotate_tetrimino(tetrimino, n);
         row = ROW - tetrimino->height[tetrimino->curr_rotation] ;
