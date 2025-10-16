@@ -11,26 +11,6 @@
 #include <stdlib.h>
 
 
-void test(){
-    int row = 18, col = COLUMN / 2;
-    Tetrimino tetrimino;
-    init_tetrimino(&tetrimino, 2);
-
-    Board board;
-    init_board(&board);
-    draw_tetrimino_onboard(&tetrimino, &board, &row, &col);
-    refresh();
-    usleep(1000000); 
-    move_left(&tetrimino, &board, &row, &col);
-    refresh();
-    usleep(1000000); 
-    move_left(&tetrimino, &board, &row, &col);
-    refresh();
-    usleep(1000000); 
-    draw_tetrimino_onboard(&tetrimino, &board, &row, &col);
-    refresh();
-    usleep(1000000);
-}
 
 Tetrimino* generate_tetrimino(int n){
     Tetrimino *tetrimino = malloc(sizeof(Tetrimino)); 
@@ -49,24 +29,15 @@ int main() {
     int test = 0;
     Board board;
     init_board(&board);
-    for(int i = 0; i< 4; i++){
-        for(int j = 0; j < COLUMN - 1; j++){
-            board.arr[i][j] = '*';
-        }
-    }
-
-    for(int j = 0; j < COLUMN - 2; j++){
-        board.arr[4][j] = '*';
-    }
 
 
 
-    while(test<20){
+    while(test<100){
         //test = 9;
         //int n = rand() % 7;
         // n = 1 3 4
-        int n = 1;
-
+        //int n = 1;
+        int n = 2;
         Tetrimino *tetrimino = generate_tetrimino(n);
         //rotate_tetrimino(tetrimino, n);
         row = ROW - tetrimino->height[tetrimino->curr_rotation] ;
@@ -86,7 +57,8 @@ int main() {
         col = COLUMN / 2;
         test++;
     }
-
+    
+    getch();
 
     //test();
     endwin();

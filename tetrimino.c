@@ -27,7 +27,7 @@ void init_tetrimino(Tetrimino *t, int id) {
     if (id == 0) t->number_rotations = 1;           
     else if (id == 1 || id > 4) t->number_rotations = 2; 
     else t->number_rotations = 4;                   
-
+    if(id==2)t->number_rotations = 4;
     switch (id) {
         case 0: // O
             for (int r = 0; r < 1; r++) {
@@ -54,10 +54,10 @@ void init_tetrimino(Tetrimino *t, int id) {
         {
             int rot[4][4][2] = {
                 {{0,1},{1,0},{1,1},{1,2}},   
-                {{0,1},{1,0},{1,1},{2,1}},  
-                {{1,0},{1,1},{1,2},{2,1}},  
-                {{0,0},{1,0},{1,1},{2,0}}    
-            };
+                {{0,0},{1,0},{1,1},{2,0}},   
+                {{0,0},{0,1},{0,2},{1,1}},   
+                {{0,1},{1,0},{1,1},{2,1}}    
+             };
             int dims[4][2] = {{3,2},{2,3},{3,2},{2,3}};
             for (int r = 0; r < 4; r++) {
                 t->width[r] = dims[r][0];
@@ -65,6 +65,7 @@ void init_tetrimino(Tetrimino *t, int id) {
                 for (int i = 0; i < 4; i++)
                     t->arr[r][rot[r][i][0]][rot[r][i][1]] = 1;
             }
+
         } break;
 
         case 3: // L
